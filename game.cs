@@ -141,11 +141,10 @@ namespace ConnectFour
             Console.WriteLine("\nGame over.Press any key to exit. ");
             Console.ReadLine();
 
-            
-            
-            
-            Console.Write("kdhfghhgfsigdfhsef");
-            // gfcxyfucdftc
+            // kjwjhegefhgwfwgfgwefhwegfhwegefyisfgyi
+
+
+            //hgeruygfiuegruewu
         }
     }
  
