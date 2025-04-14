@@ -145,10 +145,6 @@ namespace ConnectFour
 
 
             //hgeruygfiuegruewu
-            
-
-
-
         }
     }
  
