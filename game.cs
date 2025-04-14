@@ -139,9 +139,10 @@ namespace ConnectFour
                 current = (current == player1) ? player2 : player1; 
             }
             Console.WriteLine("\nGame over.Press any key to exit. ");
-            Console.ReadLine(); 
+            Console.ReadLine();
 
-
+            // comennt 
+            Console.Write("kdhfghhgfsigdfhsef");
 
         }
     }
