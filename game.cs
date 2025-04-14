@@ -148,6 +148,8 @@ namespace ConnectFour
 
 
             // this is iissss for you
+            Console.WriteLine("Thank you  ");
+
         }
     }
  
