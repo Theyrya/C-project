@@ -1,22 +1,23 @@
 
+using ConnectFour;
 using System;
 using System.Security.Cryptography.X509Certificates;
 namespace ConnectFour
 {
-    public abstract class player
+    public abstract class Player
     {
         public string Name { get; set; }
         public char DiscSymbol { get; set; }
 
         public abstract int MakeMove(Board board);
     }
-        public class HumanPlayer : Player
+    public class HumanPlayer : Player
+    {
+        public HumanPlayer(char symbol, string name)
         {
-            public HumanPlayer(char symbol, string name)
-            {
             DiscSymbol = symbol;
             Name = name;
-            }
+        }
 
         public override int MakeMove(Board board)
         {
@@ -47,15 +48,15 @@ namespace ConnectFour
     {
         private const int Rows = 6;
         private const int Cols = 7;
-        private char[,] grid = new char[Rows, Cols]; 
+        private char[,] grid = new char[Rows, Cols];
         public Board()
         {
-            for(int i = 0; i <6; i++)
-            
+            for (int i = 0; i < 6; i++)
+
                 for (int j = 0; j < 7; j++)
-                    grid[i, j] = '.'; 
+                    grid[i, j] = ' ';
         }
-           public void Display()
+        public void Display()
         {
             Console.Clear();
             Console.WriteLine(" 1 2 3 4 5 6 7");
@@ -71,29 +72,30 @@ namespace ConnectFour
                 }
                 Console.WriteLine();
                 Console.WriteLine("---------------");
-            
+
+            }
         }
         public bool DropDisc(int column, char symbol)
         {
             if (column < 0 || column >= Cols || IsColumnFull(column))
                 return false;
-            for (int row=Rows -1; row=>0; row--)
+            for (int row = Rows - 1; row >= 0; row--)
             {
                 if (grid[row, column] == '.')
                 {
                     grid[row, column] = symbol;
-                    return true; 
+                    return true;
                 }
             }
-            return false; 
+            return false;
 
         }
-        public bool IsColumnFull(int column))
+        public bool IsColumnFull(int column)
         {
-          return grid[0, column] != ' ';
+            return grid[0, column] != ' ';
 
         }
-             public bool IsBoardFull()
+        public bool IsBoardFull()
         {
             for (int col = 0; col < Cols; col++)
             {
@@ -167,73 +169,85 @@ namespace ConnectFour
             return false;
         }
     }
-
-    class Program
+    public class Game
     {
-        static void Main(string[] args)
+        private Board board;
+        private Player[] players;
+        private int currentPlayerIndex;
+
+        public Game(string player1Name, string player2Name)
         {
-            Console.WriteLine("Welcome to Connect Four\n");
-            Console.WriteLine("Enter Player 1 name: ");
+            board = new Board();
+            players = new Player[2];
+            players[0] = new HumanPlayer('X', player1Name);
+            players[1] = new HumanPlayer('O', player2Name);
+            currentPlayerIndex = 0;
+        }
 
-            string name1 = Console.ReadLine(); 
-            player player1 = new player(name1, 'X');
+        public void Start()
+        {
+            bool gameOver = false;
 
-            Console.WriteLine("Enter Player 2name: ");
-            string name2 = Console.ReadLine();
-            player player2 = new player(name2, 'O');
-
-            player current = player1;
-            Board board = new Board(); 
-            while(true)
+            while (!gameOver)
             {
                 board.Display();
-                Console.WriteLine($"{current.Name} ({current.Symbol}) choose a column (1-7): ");
+                Player currentPlayer = players[currentPlayerIndex];
 
-                bool valid = int.TryParse(Console.ReadLine(), out int col);
+                int column = currentPlayer.MakeMove(board);
+                board.DropDisc(column, currentPlayer.DiscSymbol);
 
-                col -= 1; 
-                if(!valid || col < 0 || col >= 7)
-                {
-                    Console.WriteLine("X Invalid input.Try a number from 1 - 7:  ");
-                    continue; 
-
-                }
-                if(!board.DropDisc(col, current.Symbol))
-                {
-                    Console.WriteLine(" That column is full. Try a different one: ");
-                    continue; 
-
-                    
-                }
-                if (board.CheckWin(current.Symbol))
+                if (board.CheckForWin(currentPlayer.DiscSymbol))
                 {
                     board.Display();
-                    Console.WriteLine($"{current.Name}");
-                    break; 
-
+                    Console.WriteLine($"{currentPlayer.Name} ({currentPlayer.DiscSymbol}) wins!");
+                    gameOver = true;
                 }
-                if (board.IsFull())
+                else if (board.IsBoardFull())
                 {
                     board.Display();
-                    Console.WriteLine(" !!");
-                    break; 
+                    Console.WriteLine("The game is a draw!");
+                    gameOver = true;
                 }
-                current = (current == player1) ? player2 : player1; 
+                else
+                {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % 2;
+                }
             }
-            Console.WriteLine("\nGame over.Press any key to exit. ");
-            Console.ReadLine();
 
-            // kjwjhegefhgwfwgfgwefhwegfhwegefyisfgyi
+            AskToPlayAgain();
+        }
+
+        private void AskToPlayAgain()
+        {
+            Console.Write("Would you like to play again? (y/n): ");
+            string input = Console.ReadLine().ToLower();
+
+            if (input == "y")
+            {
+                Console.Clear();
+                Game newGame = new Game(players[0].Name, players[1].Name);
+                newGame.Start();
+            }
+            else
+            {
+                Console.WriteLine("Thanks for playing Connect Four!");
+            }
+        }
 
 
-            //hgeruygfiuegruewu
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Console.WriteLine("Welcome to Connect Four!");
+                Console.Write("Enter Player 1's name: ");
+                string player1 = Console.ReadLine();
+                Console.Write("Enter Player 2's name: ");
+                string player2 = Console.ReadLine();
 
-
-            // this is iissss for you
-            Console.WriteLine("Thank you  ");
-
+                Game game = new Game(player1, player2);
+                game.Start();
+            }
         }
     }
- 
-    }
-
+}
