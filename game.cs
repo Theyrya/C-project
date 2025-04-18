@@ -3,42 +3,81 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 namespace ConnectFour
 {
-    class player
+    public abstract class player
     {
         public string Name { get; set; }
-        public char Symbol { get; set; }
+        public char DiscSymbol { get; set; }
 
-        public player(string name, char symbol)
+        public abstract int MakeMove(Board board);
+    }
+        public class HumanPlayer : Player
         {
+            public HumanPlayer(char symbol, string name)
+            {
+            DiscSymbol = symbol;
             Name = name;
-            Symbol = symbol; 
+            }
+
+        public override int MakeMove(Board board)
+        {
+            int column;
+            bool isValid;
+
+            do
+            {
+                Console.Write($"{Name}'s turn ({DiscSymbol}). Enter column (1-7): ");
+                string input = Console.ReadLine();
+
+                isValid = int.TryParse(input, out column) &&
+                         column >= 1 &&
+                         column <= 7 &&
+                         !board.IsColumnFull(column - 1);
+
+                if (!isValid)
+                {
+                    Console.WriteLine("Invalid input or column is full. Please try again.");
+                }
+            } while (!isValid);
+
+            return column - 1; // Convert to 0-based index
         }
     }
 
-    class Board
+    public class Board
     {
-        private char[,] grid = new char[6, 7]; 
+        private const int Rows = 6;
+        private const int Cols = 7;
+        private char[,] grid = new char[Rows, Cols]; 
         public Board()
         {
             for(int i = 0; i <6; i++)
             
                 for (int j = 0; j < 7; j++)
                     grid[i, j] = '.'; 
-            }
+        }
            public void Display()
         {
-            Console.WriteLine("Connect Four Game\n"); 
-            for(int i=0; i<6; i++)
+            Console.Clear();
+            Console.WriteLine(" 1 2 3 4 5 6 7");
+            Console.WriteLine("---------------");
+
+            for (int row = 0; row < Rows; row++)
             {
-                for (int j = 0; j < 7; j++)
-                    Console.WriteLine(grid[i, j]);
-                Console.WriteLine(); 
-            }
-            Console.WriteLine("1 2 3 4 5 6 7\n"); 
+                Console.Write("|");
+                for (int col = 0; col < Cols; col++)
+                {
+                    Console.Write(grid[row, col]);
+                    Console.Write("|");
+                }
+                Console.WriteLine();
+                Console.WriteLine("---------------");
+            
         }
         public bool DropDisc(int column, char symbol)
         {
-            for(int row=5; row>0; row--)
+            if (column < 0 || column >= Cols || IsColumnFull(column))
+                return false;
+            for (int row=Rows -1; row=>0; row--)
             {
                 if (grid[row, column] == '.')
                 {
@@ -49,13 +88,19 @@ namespace ConnectFour
             return false; 
 
         }
-        public bool IsFull()
+        public bool IsColumnFull(int column))
         {
-            for (int i = 0; i < 7; i++)
-                if (grid[0, i] == '.')
-                    return false;
-            return true; 
+          return grid[0, column] != ' ';
 
+        }
+             public bool IsBoardFull()
+        {
+            for (int col = 0; col < Cols; col++)
+            {
+                if (!IsColumnFull(col))
+                    return false;
+            }
+            return true;
         }
         public bool CheckWin(char symbol)
         {
