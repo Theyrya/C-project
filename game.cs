@@ -102,35 +102,72 @@ namespace ConnectFour
             }
             return true;
         }
-        public bool CheckWin(char symbol)
+        public bool CheckForWin(char disc)
         {
-            for (int i = 0; i < 6; i++)
-                for (int j = 0; j < 4; j++)
-                    if (grid[i, j] == symbol && grid[i, j + 1] == symbol
-                        && grid[i, j + 2] == symbol && grid[i, j + 3] == symbol)
+            // Check horizontal
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int col = 0; col < Cols - 3; col++)
+                {
+                    if (grid[row, col] == disc &&
+                        grid[row, col + 1] == disc &&
+                        grid[row, col + 2] == disc &&
+                        grid[row, col + 3] == disc)
+                    {
                         return true;
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 7; j++)
-                    if (grid[i, j] == symbol && grid[i + 1, j] == symbol &&
-                        grid[i + 2, j] == symbol && grid[i + 3, j] == symbol)
-                        return true;
-            // Diagonal(bottom - left to top - right)
-            for (int i = 3; i < 6; i++)
-                for (int j = 0; j < 4; j++)
-                    if (grid[i, j] == symbol && grid[i - 1, j + 1] == symbol &&
-                        grid[i - 2, j + 2] == symbol && grid[i - 3, j + 3] == symbol)
-                        return true;
+                    }
+                }
+            }
 
-            // Diagonal (top-left to bottom-right)
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 4; j++)
-                    if (grid[i, j] == symbol && grid[i + 1, j + 1] == symbol &&
-                        grid[i + 2, j + 2] == symbol && grid[i + 3, j + 3] == symbol)
+            // Check vertical
+            for (int row = 0; row < Rows - 3; row++)
+            {
+                for (int col = 0; col < Cols; col++)
+                {
+                    if (grid[row, col] == disc &&
+                        grid[row + 1, col] == disc &&
+                        grid[row + 2, col] == disc &&
+                        grid[row + 3, col] == disc)
+                    {
                         return true;
+                    }
+                }
+            }
+
+            // Check diagonal (top-left to bottom-right)
+            for (int row = 0; row < Rows - 3; row++)
+            {
+                for (int col = 0; col < Cols - 3; col++)
+                {
+                    if (grid[row, col] == disc &&
+                        grid[row + 1, col + 1] == disc &&
+                        grid[row + 2, col + 2] == disc &&
+                        grid[row + 3, col + 3] == disc)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // Check diagonal (bottom-left to top-right)
+            for (int row = 3; row < Rows; row++)
+            {
+                for (int col = 0; col < Cols - 3; col++)
+                {
+                    if (grid[row, col] == disc &&
+                        grid[row - 1, col + 1] == disc &&
+                        grid[row - 2, col + 2] == disc &&
+                        grid[row - 3, col + 3] == disc)
+                    {
+                        return true;
+                    }
+                }
+            }
 
             return false;
         }
     }
+
     class Program
     {
         static void Main(string[] args)
