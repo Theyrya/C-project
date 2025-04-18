@@ -75,21 +75,23 @@ namespace ConnectFour
 
             }
         }
-        public bool DropDisc(int column, char symbol)
+        public bool DropDisc(int column, char disc)
         {
             if (column < 0 || column >= Cols || IsColumnFull(column))
                 return false;
+
             for (int row = Rows - 1; row >= 0; row--)
             {
-                if (grid[row, column] == '.')
+                if (grid[row, column] == ' ')
                 {
-                    grid[row, column] = symbol;
+                    grid[row, column] = disc;
                     return true;
                 }
             }
-            return false;
 
+            return false;
         }
+
         public bool IsColumnFull(int column)
         {
             return grid[0, column] != ' ';
