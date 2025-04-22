@@ -51,9 +51,9 @@ namespace ConnectFour
         private char[,] grid = new char[Rows, Cols];
         public Board()
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < Rows; i++)
 
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < Cols; j++)
                     grid[i, j] = ' ';
         }
         public void Display()
