@@ -1,7 +1,6 @@
 
 using ConnectFour;
 using System;
-using System.Security.Cryptography.X509Certificates;
 namespace ConnectFour
 {
     public abstract class Player
@@ -108,11 +107,13 @@ namespace ConnectFour
         }
         public bool CheckForWin(char disc)
         {
-                return CheckHorizontalWin(disc) || 
-           CheckVerticalWin(disc) || 
-           CheckDiagonalDownWin(disc) || 
-           CheckDiagonalUpWin(disc);
+            return CheckHorizontalWin(disc) ||
+       CheckVerticalWin(disc) ||
+       CheckDiagonalDownWin(disc) ||
+       CheckDiagonalUpWin(disc);
+           }
 
+            private bool CheckHorizontalWin(char disc) { 
             for (int row = 0; row < Rows; row++)
             {
                 for (int col = 0; col < Cols - 3; col++)
@@ -126,8 +127,11 @@ namespace ConnectFour
                     }
                 }
             }
+            return false ;
+        }
 
             // Check vertical
+            private bool CheckVerticalWin(char disc) { 
             for (int row = 0; row < Rows - 3; row++)
             {
                 for (int col = 0; col < Cols; col++)
@@ -141,8 +145,12 @@ namespace ConnectFour
                     }
                 }
             }
+            return false;
+        }
+
 
             // Check diagonal (top-left to bottom-right)
+            private bool CheckDiagonalDownWin(char disc) { 
             for (int row = 0; row < Rows - 3; row++)
             {
                 for (int col = 0; col < Cols - 3; col++)
@@ -156,8 +164,11 @@ namespace ConnectFour
                     }
                 }
             }
+            return false;
+        }
 
             // Check diagonal (bottom-left to top-right)
+            private bool CheckDiagonalUpWin(char disc) { 
             for (int row = 3; row < Rows; row++)
             {
                 for (int col = 0; col < Cols - 3; col++)
@@ -171,8 +182,10 @@ namespace ConnectFour
                     }
                 }
             }
-
             return false;
+        }
+
+            
         }
     }
     public class Game
@@ -266,4 +279,3 @@ namespace ConnectFour
             }
         }
     }
-}
