@@ -108,7 +108,11 @@ namespace ConnectFour
         }
         public bool CheckForWin(char disc)
         {
-            // Check horizontal
+                return CheckHorizontalWin(disc) || 
+           CheckVerticalWin(disc) || 
+           CheckDiagonalDownWin(disc) || 
+           CheckDiagonalUpWin(disc);
+
             for (int row = 0; row < Rows; row++)
             {
                 for (int col = 0; col < Cols - 3; col++)
