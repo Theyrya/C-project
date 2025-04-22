@@ -242,10 +242,20 @@ namespace ConnectFour
             static void Main(string[] args)
             {
                 Console.WriteLine("Welcome to Connect Four!");
-                Console.Write("Enter Player 1's name: ");
-                string player1 = Console.ReadLine();
-                Console.Write("Enter Player 2's name: ");
-                string player2 = Console.ReadLine();
+                string player1;
+                do
+                {
+                    Console.Write("Enter Player 1's name: ");
+                    player1 = Console.ReadLine()?.Trim();
+                } while (string.IsNullOrEmpty(player1));
+
+                string player2;
+                do
+                {
+                    Console.Write("Enter Player 2's name: ");
+                    player2 = Console.ReadLine()?.Trim();
+                } while (string.IsNullOrEmpty(player2));
+
 
                 Game game = new Game(player1, player2);
                 game.Start();
